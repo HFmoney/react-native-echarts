@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { WebView, View, StyleSheet } from 'react-native';
+import { WebView, View, StyleSheet, Platform } from 'react-native';
 import renderChart from './renderChart';
 import echarts from './echarts.min';
+
+const source = (Platform.OS == 'ios') ? require('./tpl.html') : {'uri':'file:///android_asset/tpl.html'}
 
 export default class App extends Component {
   componentWillReceiveProps(nextProps) {
@@ -16,11 +18,12 @@ export default class App extends Component {
         <WebView
           ref="chart"
           scrollEnabled = {false}
+          scalesPageToFit={Platform.OS === 'ios' ? false : true}
           injectedJavaScript = {renderChart(this.props)}
           style={{
             height: this.props.height || 400,
           }}
-          source={require('./tpl.html')}
+          source={source}
         />
       </View>
     );
